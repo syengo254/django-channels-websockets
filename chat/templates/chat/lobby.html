@@ -38,6 +38,10 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
+            if (chatSocket.readyState === chatSocket.CLOSED) {
+                chatSocket.dispatchEvent('open')
+            }
+
             let message = form.message.value;
 
             if (message.length > 2) {
