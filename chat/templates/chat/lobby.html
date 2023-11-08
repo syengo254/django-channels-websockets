@@ -9,6 +9,11 @@
 
 <body>
     <h1>Let's chat</h1>
+
+    <form id="chat-form">
+        <input type="text" name="message" placeholder="type a message here..." />
+    </form>
+    <div id="messages"></div>
     <script type="text/javascript">
         let url = `ws://${window.location.host}/ws/socket-server/`;
 
@@ -16,7 +21,33 @@
         chatSocket.onmessage = function (e) {
             let data = JSON.parse(e.data);
             console.log(data);
+
+            if (data.type === 'chat') {
+                let messagesDiv = document.querySelector("#messages");
+                const newNode = document.createElement('p');
+                newNode.textContent = data.message
+                messagesDiv.appendChild(newNode);
+            }
         }
+
+        chatSocket.onclose = function (e) {
+            console.log('server conn closed unexpectedly, details:', e);
+        }
+
+        let form = document.querySelector('#chat-form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let message = form.message.value;
+
+            if (message.length > 2) {
+                chatSocket.send(JSON.stringify({
+                    message,
+                    type: 'user-message',
+                }));
+                form.reset();
+            }
+        })
     </script>
 </body>
 

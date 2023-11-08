@@ -73,6 +73,12 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'djangowebsocketch.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
+
 WSGI_APPLICATION = 'djangowebsocketch.wsgi.application'
 
 
