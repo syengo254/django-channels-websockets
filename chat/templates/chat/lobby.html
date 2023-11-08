@@ -20,13 +20,24 @@
         const chatSocket = new WebSocket(url);
         chatSocket.onmessage = function (e) {
             let data = JSON.parse(e.data);
-            console.log(data);
+            let messagesDiv = document.querySelector("#messages");
 
             if (data.type === 'chat') {
-                let messagesDiv = document.querySelector("#messages");
                 const newNode = document.createElement('p');
                 newNode.textContent = data.message
                 messagesDiv.appendChild(newNode);
+            }
+            else {
+                console.log(data.message);
+
+                // pre-populate with history is present
+                if (data.history.length > 0) {
+                    data.history.forEach((hist) => {
+                        const newNode = document.createElement('p');
+                        newNode.textContent = hist
+                        messagesDiv.appendChild(newNode);
+                    });
+                }
             }
         }
 
